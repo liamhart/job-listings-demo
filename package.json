@@ -1,0 +1,14 @@
+{
+  "name": "static-job-listings-master",
+  "version": "1.0.0",
+  "description": "FEM JS Job Finder Challenge",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Liam H.",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
