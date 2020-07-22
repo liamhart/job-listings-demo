@@ -27,7 +27,6 @@ $(document).ready(function() {
       Listings.push(new Listing(data[i]))
     }
 
-    console.log(Listings)
 
     for(var i = 0; i < Listings.length; i++) {
       // Determine if feature identifiers will be present in the listing
@@ -95,7 +94,6 @@ $(document).ready(function() {
       else {
         $('.search-bar').css('visibility', 'hidden')
       }
-      console.log(queries)
     })
 
   })
