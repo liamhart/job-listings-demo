@@ -67,11 +67,16 @@ p {
 
 .remove-search {
   float: right;
-  padding: 6px 6px 2px 6px;
+  padding: 6px 8px 2px 8px;
   background-color: hsl(180, 29%, 50%);
   color: #fff;
   height: 30px;
-  width: 25px;
+  width: 29px;
+  cursor: pointer;
+}
+
+.remove-search:hover {
+  background-color: hsl(180, 14%, 20%)
 }
 
 .search-cross {

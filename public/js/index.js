@@ -1,7 +1,9 @@
-
-
 $(document).ready(function() {
 
+  // array of active listings
+  var Listings = []
+
+  // object representing each listing, helps in accessing tags
   function Listing(data) {
     this.id = data.id;
     this.company = data.company;
@@ -19,14 +21,42 @@ $(document).ready(function() {
     this.tags = [].concat(data.role, data.level, data.languages, data.tools)
   }
 
+  // helper function for tag search
+  function search(queries, target) {
+    if(queries.includes(target)) {
+      // remove existing query
+      queries.splice(queries.indexOf(target), 1)
+      // find specific search tag related to the existing query
+      $('.search-tag-' + target).addClass('removed')
+      // any job listings that were not included in the search should re-appear
+      for(var i = 0; i < Listings.length; i++) {
+        if(queries.every(r => Listings[i].tags.includes(r))) {
+          $('#' + Listings[i].id + '.job-container').css('display', 'block')
+        }
+      }
+    }
+    else {
+      // add new query
+      queries.push(target)
+      // add search tag related to user query
+      $('.search-tags').append('<div class="query-wrapper search-tag-' + target + '"> <div class="listing-search"> <p class="listing-name">' + target + '</p></div><div class="remove-search"> <span class="search-cross"></span> </div></div>')
+
+      $('.job-container').not(':has(.listing-tag-' + target + ')').css('display','none')
+    }
+    if(queries.length) {
+      $('.search-bar').css('visibility', 'visible')
+    }
+    else {
+      $('.search-bar').css('visibility', 'hidden')
+    }
+  }
+
 
   $.getJSON('data.json', function(data) {
-    var Listings = []
     // structure page from JSON data
     for(var i = 0; i < data.length; i++) {
       Listings.push(new Listing(data[i]))
     }
-
 
     for(var i = 0; i < Listings.length; i++) {
       // Determine if feature identifiers will be present in the listing
@@ -68,32 +98,16 @@ $(document).ready(function() {
     // this will hold all active queries
     var queries = [];
     $('.listing-tag').click(function() {
-      if(queries.includes($(this).text())) {
-        // remove existing query
-        queries.splice(queries.indexOf($(this).text()), 1)
-        // find specific search tag related to the existing query
-        $('.search-tag-' + $(this).text()).addClass('removed')
-        // any job listings that were not included in the search should re-appear
-        for(var i = 0; i < Listings.length; i++) {
-          if(queries.every(r => Listings[i].tags.includes(r))) {
-            $('#' + Listings[i].id + '.job-container').css('display', 'block')
-          }
-        }
-      }
-      else {
-        // add new query
-        queries.push($(this).text())
-        // add search tag related to user query
-        $('.search-tags').append('<div class="query-wrapper search-tag-' + $(this).text() + '"> <div class="listing-search"> <p>' + $(this).text() + '</p></div><div class="remove-search"> <span class="search-cross"></span> </div></div>')
 
-        $('.job-container').not(':has(.listing-tag-' + $(this).text() + ')').css('display','none')
-      }
-      if(queries.length) {
-        $('.search-bar').css('visibility', 'visible')
-      }
-      else {
-        $('.search-bar').css('visibility', 'hidden')
-      }
+      search(queries, $(this).text())
+
+    })
+
+    $('.search-bar').on('click', '.remove-search', function() {
+
+      search(queries, $(this).parent().find('.listing-name').text())
+
+
     })
 
   })
